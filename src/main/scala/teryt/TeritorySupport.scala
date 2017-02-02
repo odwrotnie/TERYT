@@ -1,9 +1,7 @@
 package teryt
 
-import teryt.Teryt.teritories
 import teryt.helpers.Helpers
 import teryt.model._
-
 import scala.xml.XML
 
 trait TeritorySupport {
@@ -23,14 +21,5 @@ trait TeritorySupport {
     val t = Teritory(woj, pow, gmi, rodz, nazwa, nazdod)
     println(t)
     t
-  }
-
-  val polska = Country("Polska")
-
-  lazy val wojewodztwa = teritories.filter(t => t.pow == 0 && t.gmi == 0).map { t =>
-    val wojewodztwo = Wojewodztwo(t.woj, t.nazwa)
-    wojewodztwo.parent = Some(polska)
-    polska.children += wojewodztwo
-    wojewodztwo
   }
 }

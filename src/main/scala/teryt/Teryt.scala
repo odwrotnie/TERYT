@@ -11,14 +11,21 @@ object Teryt
   override def simcFilename: String = "SIMC.xml"
   override def tercFilename: String = "TERC.xml"
 
-  val powiaty = teritories.filter(t => t.pow != 0 && t.gmi == 0).map { t =>
+  lazy val polska = Country("Polska")
+  lazy val wojewodztwa = teritories.filter(t => t.pow == 0 && t.gmi == 0).map { t =>
+    val wojewodztwo = Wojewodztwo(t.woj, t.nazwa)
+    wojewodztwo.parent = Some(polska)
+    polska.children += wojewodztwo
+    wojewodztwo
+  }
+  lazy val powiaty = teritories.filter(t => t.pow != 0 && t.gmi == 0).map { t =>
     val wojewodztwo = wojewodztwa.filter(w => w.id == t.woj).head
     val powiat = Powiat(t.pow, t.nazwa, wojewodztwo)
     powiat.parent = Some(wojewodztwo)
     wojewodztwo.children += powiat
     powiat
   }
-  val gminy = teritories.filter(t => t.pow != 0 && t.gmi != 0).map { t =>
+  lazy val gminy = teritories.filter(t => t.pow != 0 && t.gmi != 0).map { t =>
     val wojewodztwo = wojewodztwa.filter(w => w.id == t.woj).head
     val powiat = powiaty.filter(p => p.id == t.pow && p.wojewodztwo == wojewodztwo).head
     val gmina = Gmina(t.gmi, t.nazwa, powiat)
@@ -26,7 +33,7 @@ object Teryt
     powiat.children += gmina
     gmina
   }
-  val miejscowosci = places.map { place =>
+  lazy val miejscowosci = places.map { place =>
     val wojewodztwo = wojewodztwa.filter(w => w.id == place.woj).head
     val powiat = powiaty.filter(powiat => powiat.id == place.pow && powiat.wojewodztwo == wojewodztwo).head
     val gmina = gminy.filter(gmina => gmina.id == place.gmi && gmina.powiat == powiat && gmina.powiat.wojewodztwo == wojewodztwo).head
