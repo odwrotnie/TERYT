@@ -17,8 +17,6 @@ trait PlaceSupport {
     val gmi = safeToInt(row \\ "_" filter attributeValueEquals("GMI") text)
     val rodz = safeToInt(row \\ "_" filter attributeValueEquals("RODZ") text)
     val nazwa = (row \\ "_" filter attributeValueEquals("NAZWA") text)
-    val p = Place(woj, pow, gmi, rodz, nazwa)
-    println(p)
-    p
+    Place(woj, pow, gmi, rodz, nazwa)
   }
 }

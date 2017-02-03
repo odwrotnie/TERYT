@@ -18,8 +18,6 @@ trait TeritorySupport {
     val rodz = safeToInt(row \\ "_" filter attributeValueEquals("RODZ") text)
     val nazwa = (row \\ "_" filter attributeValueEquals("NAZWA") text)
     val nazdod = (row \\ "_" filter attributeValueEquals("NAZDOD") text)
-    val t = Teritory(woj, pow, gmi, rodz, nazwa, nazdod)
-    println(t)
-    t
+    Teritory(woj, pow, gmi, rodz, nazwa, nazdod)
   }
 }
