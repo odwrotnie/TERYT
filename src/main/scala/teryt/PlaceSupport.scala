@@ -11,7 +11,7 @@ trait PlaceSupport
 
   def simcFilename: String
 
-  val simcXML: Elem = XML.loadFile(simcFilename)
+  val simcXML: Elem = xmlFromResources(simcFilename)
   val placesXML: NodeSeq = simcXML \\ "teryt" \\ "catalog" \\ "row"
   val places: Seq[Place] = placesXML map { row =>
     val woj = safeToInt(row \\ "_" filter attributeValueEquals("WOJ") text)

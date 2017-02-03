@@ -1,6 +1,8 @@
 package teryt.helpers
 
-import scala.xml.Node
+import java.io.File
+
+import scala.xml.{Elem, Node, XML}
 
 trait Helpers {
 
@@ -10,5 +12,12 @@ trait Helpers {
   def safeToInt(s: String): Int = s match {
     case "" => 0
     case s => s.toInt
+  }
+
+  def xmlFromResources(path: String*): Elem = {
+    val pathString = path.mkString("/", "/", "")
+    val uri = getClass.getResource(pathString).toURI
+    val file = new File(uri)
+    XML.loadFile(file)
   }
 }

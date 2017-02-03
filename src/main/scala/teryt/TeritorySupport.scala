@@ -11,7 +11,7 @@ trait TeritorySupport
 
   def tercFilename: String
 
-  val tercXML: Elem = XML.loadFile(tercFilename)
+  val tercXML: Elem = xmlFromResources(tercFilename)
   val teritoriesXML: NodeSeq = tercXML \\ "teryt" \\ "catalog" \\ "row"
   val teritories: Seq[Teritory] = teritoriesXML map { row =>
     val woj = safeToInt(row \\ "_" filter attributeValueEquals("WOJ") text)
