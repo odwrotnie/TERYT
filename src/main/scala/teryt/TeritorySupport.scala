@@ -1,23 +1,27 @@
 package teryt
 
+import com.typesafe.scalalogging.LazyLogging
 import teryt.helpers.Helpers
 import teryt.model._
-import scala.xml.XML
+import scala.xml._
 
-trait TeritorySupport {
+trait TeritorySupport
+  extends LazyLogging {
   this: Helpers =>
 
   def tercFilename: String
 
-  val tercXML = XML.loadFile(tercFilename)
-  val teritoriesXML = tercXML \\ "teryt" \\ "catalog" \\ "row"
-  val teritories = teritoriesXML map { row =>
+  val tercXML: Elem = XML.loadFile(tercFilename)
+  val teritoriesXML: NodeSeq = tercXML \\ "teryt" \\ "catalog" \\ "row"
+  val teritories: Seq[Teritory] = teritoriesXML map { row =>
     val woj = safeToInt(row \\ "_" filter attributeValueEquals("WOJ") text)
     val pow = safeToInt(row \\ "_" filter attributeValueEquals("POW") text)
     val gmi = safeToInt(row \\ "_" filter attributeValueEquals("GMI") text)
     val rodz = safeToInt(row \\ "_" filter attributeValueEquals("RODZ") text)
-    val nazwa = (row \\ "_" filter attributeValueEquals("NAZWA") text)
-    val nazdod = (row \\ "_" filter attributeValueEquals("NAZDOD") text)
-    Teritory(woj, pow, gmi, rodz, nazwa, nazdod)
+    val nazwa = row \\ "_" filter attributeValueEquals("NAZWA") text
+    val nazdod = row \\ "_" filter attributeValueEquals("NAZDOD") text
+    val t = Teritory(woj, pow, gmi, rodz, nazwa, nazdod)
+    logger.debug(s"Teritory extracted: $t")
+    t
   }
 }
