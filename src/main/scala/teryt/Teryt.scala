@@ -12,7 +12,7 @@ object Teryt
   override def tercFilename: String = "TERC.xml"
 
   lazy val polska = Country("Polska")
-  lazy val wojewodztwa = teritories.filter(t => t.pow == 0 && t.gmi == 0).map { t =>
+  val wojewodztwa = teritories.filter(t => t.pow == 0 && t.gmi == 0).map { t =>
     val wojewodztwo = Wojewodztwo(t.woj, t.nazwa)
     wojewodztwo.parent = Some(polska)
     polska.children += wojewodztwo
